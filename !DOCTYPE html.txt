@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BU MotoSpace - ลงทะเบียนฐานทัพชาวไบค์เกอร์</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #0f172a; color: white; overflow-x: hidden; }
+        .bu-gradient { background: linear-gradient(135deg, #7c3aed 0%, #f97316 100%); }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #7c3aed;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        select option {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-md w-full glass p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bu-gradient opacity-20 blur-3xl rounded-full"></div>
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500 opacity-10 blur-3xl rounded-full"></div>
+        
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-2 tracking-tight">BU <span class="text-purple-500">Moto</span><span class="text-orange-500">Space</span></h1>
+            <p class="text-slate-400 text-sm">ระบบลงทะเบียนที่จอดรถจักรยานยนต์สำหรับนักศึกษา</p>
+        </div>
+
+        <form id="regForm" onsubmit="return false;" class="space-y-4">
+            <!-- Name & Surname Row -->
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">ชื่อ</label>
+                    <input type="text" id="firstName" placeholder="ชื่อ" 
+                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 transition-all text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">นามสกุล</label>
+                    <input type="text" id="lastName" placeholder="นามสกุล" 
+                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 transition-all text-white">
+                </div>
+            </div>
+
+            <!-- Student ID -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">รหัสนักศึกษา</label>
+                <input type="text" id="studentId" placeholder="16x-xxxx-xxxx" maxlength="13"
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 transition-all text-white">
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">เบอร์โทรศัพท์</label>
+                <input type="tel" id="phoneNumber" placeholder="08x-xxx-xxxx" maxlength="10"
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 transition-all text-white">
+            </div>
+
+            <!-- License Plate Section -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">ทะเบียนรถ</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="platePrefix" placeholder="กขค" maxlength="3"
+                            class="w-1/3 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 text-center uppercase">
+                        <input type="text" id="plateNumber" placeholder="1234" maxlength="4"
+                            class="w-2/3 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5">จังหวัด</label>
+                    <select id="plateProvince" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 transition-all text-white appearance-none cursor-pointer">
+                        <option value="" disabled selected>เลือกจังหวัด</option>
+                        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+                        <option value="ปทุมธานี">ปทุมธานี</option>
+                        <option value="นนทบุรี">นนทบุรี</option>
+                        <option value="สมุทรปราการ">สมุทรปราการ</option>
+                        <option value="ชลบุรี">ชลบุรี</option>
+                        <option value="เชียงใหม่">เชียงใหม่</option>
+                        <option value="ขอนแก่น">ขอนแก่น</option>
+                        <option value="ภูเก็ต">ภูเก็ต</option>
+                        <option value="อื่นๆ">จังหวัดอื่นๆ</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Motorcycle Photo Upload Section -->
+            <div onclick="document.getElementById('fileInput').click()" 
+                 class="p-4 border-2 border-dashed border-slate-700 rounded-2xl text-center hover:border-orange-500 cursor-pointer transition-all group relative">
+                <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="handleFile(this)">
+                <div id="uploadPlaceholder">
+                    <div class="text-slate-500 group-hover:text-orange-400 mb-1 text-2xl">🏍️</div>
+                    <p class="text-[10px] text-slate-400 font-medium">อัปโหลดรูปภาพรถจักรยานยนต์</p>
+                    <p class="text-[8px] text-slate-500 mt-1">(ให้เห็นป้ายทะเบียนชัดเจน)</p>
+                </div>
+                <div id="filePreview" class="hidden text-xs text-green-400 font-semibold flex flex-col items-center gap-2">
+                    <div class="text-xl">✅</div>
+                    <span>เลือกรูปภาพรถเรียบร้อยแล้ว</span>
+                </div>
+            </div>
+
+            <button id="submitBtn" onclick="submitForm()" class="w-full bu-gradient py-4 rounded-xl font-bold text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-lg flex justify-center items-center gap-3">
+                <span>ลงทะเบียน</span>
+            </button>
+            
+            <p id="errorMsg" class="text-red-400 text-xs text-center hidden"></p>
+        </form>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="hidden text-center py-4 space-y-6 animate-in fade-in zoom-in duration-500">
+            <div class="w-20 h-20 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 border border-green-500/30">✓</div>
+            <div>
+                <h2 class="text-2xl font-bold">ลงทะเบียนเรียบร้อย!</h2>
+                <p id="welcomeUser" class="text-indigo-400 font-medium"></p>
+                <p class="text-slate-400 text-sm mt-2">กรุณาบันทึก QR Code นี้<br>เพื่อใช้สำหรับเข้าจอดในโซน Smart Parking</p>
+            </div>
+            
+            <div class="p-4 bg-white rounded-3xl mx-auto w-48 h-48 flex flex-col items-center justify-center shadow-2xl ring-8 ring-white/5">
+                <img id="qrImage" src="" alt="QR Code" class="w-32 h-32">
+                <div class="text-slate-900 font-bold text-[10px] mt-2 tracking-widest uppercase flex flex-col" id="displayPlate">
+                    <span id="plateLabel">ABC-1234</span>
+                    <span id="provinceLabel" class="text-[8px] opacity-70">กรุงเทพมหานคร</span>
+                </div>
+            </div>
+
+            <button onclick="resetForm()" class="text-slate-500 text-sm hover:text-white transition-colors underline">ลงทะเบียนคันอื่น</button>
+        </div>
+
+        <div class="mt-6 text-center text-[10px] text-slate-600 uppercase tracking-widest">
+            &copy; 2024 BU MotoSpace | Creative Intelligence Strategy
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // URL ของ Google Apps Script Web App (ต้องนำมาใส่หลังจาก Deploy Apps Script)
+        // =========================================================================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYCRtiWdE6cUIYMdBh1kUAS8aXyIFGeUJe2MEsxbgpqnSILKYqy080o5QwgkDO0rbyMg/exec';
+
+        window.handleFile = function(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('uploadPlaceholder').classList.add('hidden');
+                document.getElementById('filePreview').classList.remove('hidden');
+            }
+        };
+
+        // ฟังก์ชันแปลงรูปภาพเป็น Base64 เพื่อส่งผ่าน HTTP Request
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    // ตัดส่วน 'data:image/jpeg;base64,' ออก เอาแค่ข้อมูล
+                    resolve(reader.result.split(',')[1]); 
+                };
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        window.submitForm = async function() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const studentId = document.getElementById('studentId').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const prefix = document.getElementById('platePrefix').value.trim();
+            const number = document.getElementById('plateNumber').value.trim();
+            const province = document.getElementById('plateProvince').value;
+            const fileInput = document.getElementById('fileInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (!firstName || !lastName || !studentId || !phoneNumber || !prefix || !number || !province) {
+                showError("กรุณากรอกข้อมูลให้ครบถ้วน");
+                return;
+            }
+
+            if (fileInput.files.length === 0) {
+                showError("กรุณาอัปโหลดรูปภาพรถจักรยานยนต์");
+                return;
+            }
+
+            if (GOOGLE_SCRIPT_URL === 'ใส่_URL_WEB_APP_ที่ได้จาก_Google_Apps_Script_ที่นี่') {
+                showError("⚠️ ระบบยังไม่ได้เชื่อมต่อ Google Apps Script (กรุณาดูคู่มือตั้งค่า)");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="loader"></span> <span class="ml-2">กำลังอัปโหลดข้อมูล...</span>`;
+            errorMsg.classList.add('hidden');
+
+            try {
+                // 1. แปลงไฟล์ภาพเป็น Base64
+                const file = fileInput.files[0];
+                const base64Data = await getBase64(file);
+                
+                // 2. เตรียมข้อมูล Payload
+                const payload = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    studentId: studentId,
+                    phoneNumber: phoneNumber,
+                    plate: `${prefix}-${number}`,
+                    province: province,
+                    imageName: `Moto_${studentId}_${Date.now()}`,
+                    mimeType: file.type,
+                    imageData: base64Data
+                };
+
+                // 3. ส่งข้อมูลไปยัง Google Apps Script
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    // No 'Content-Type' header to avoid CORS preflight issues with Google Script
+                    body: JSON.stringify(payload) 
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    // แสดงผลหน้าสำเร็จ
+                    document.getElementById('welcomeUser').innerText = `นักศึกษา: ${firstName} ${lastName}`;
+                    document.getElementById('plateLabel').innerText = `${prefix.toUpperCase()}-${number}`;
+                    document.getElementById('provinceLabel').innerText = province;
+                    
+                    // สร้าง QR Code
+                    document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BUMS-STU-${studentId}`;
+                    
+                    document.getElementById('regForm').classList.add('hidden');
+                    document.getElementById('successMessage').classList.remove('hidden');
+                } else {
+                    throw new Error(result.message || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์");
+                }
+                
+            } catch (error) {
+                console.error("Submission error:", error);
+                showError("เกิดข้อผิดพลาด: " + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<span>ลงทะเบียน</span>`;
+            }
+        };
+
+        window.resetForm = function() {
+            document.getElementById('regForm').reset();
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('filePreview').classList.add('hidden');
+            document.getElementById('regForm').classList.remove('hidden');
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('errorMsg').classList.add('hidden');
+        };
+
+        function showError(msg) {
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.innerText = msg;
+            errorMsg.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
