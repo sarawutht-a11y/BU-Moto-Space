@@ -3,308 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BU MotoSpace - Biker Registration</title>
+    <title>BU MotoSpace - ลงทะเบียนฐานทัพชาวไบค์เกอร์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Kanit', sans-serif; 
-            background-color: #020617; 
-            color: white; 
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% -20%, #312e81 0%, #020617 80%);
-        }
+        body { font-family: 'Kanit', sans-serif; background-color: #0f172a; color: white; overflow-x: hidden; }
         .bu-gradient { background: linear-gradient(135deg, #7c3aed 0%, #f97316 100%); }
-        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
         .loader {
-            border: 3px solid rgba(255,255,255,0.1);
+            border: 3px solid #f3f3f3;
             border-top: 3px solid #7c3aed;
             border-radius: 50%;
             width: 24px;
             height: 24px;
-            animation: spin 0.8s linear infinite;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        input::placeholder { color: #475569; }
         select option { background-color: #0f172a; color: white; }
-        
-        /* Custom scrollbar */
+
+        .tab-active { 
+            background-color: #f97316 !important; 
+            border-color: #f97316 !important; 
+            color: #ffffff !important; 
+            font-weight: 600;
+            box-shadow: 0 4px 14px 0 rgba(249, 115, 22, 0.39);
+        }
+        .tab-inactive { 
+            background-color: #1e293b; 
+            border-color: #334155; 
+            color: #94a3b8; 
+        }
+
+        .bike-preview-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid #f97316;
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.5);
+            object-fit: cover;
+            background-color: #1e293b;
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-
-        .animate-success { animation: successPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes successPop {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
     <div class="max-w-md w-full glass p-8 rounded-3xl shadow-2xl relative overflow-hidden">
-        <!-- Decoration Orbs -->
-        <div class="absolute -top-20 -right-20 w-48 h-48 bu-gradient opacity-10 blur-[80px] rounded-full"></div>
-        <div class="absolute -bottom-20 -left-20 w-48 h-48 bg-blue-600 opacity-10 blur-[80px] rounded-full"></div>
+        <div class="absolute -top-10 -right-10 w-32 h-32 bu-gradient opacity-20 blur-3xl rounded-full"></div>
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500 opacity-10 blur-3xl rounded-full"></div>
         
-        <div id="formSection">
-            <div class="text-center mb-8">
-                <div class="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-slate-400 uppercase tracking-widest mb-4">
-                Student Parking System
-            </div>
-            <h1 class="text-4xl font-bold mb-2 tracking-tight">BU <span class="text-transparent bg-clip-text bu-gradient">MotoSpace</span></h1>
-            <p class="text-slate-400 text-sm">ลงทะเบียนรถจักรยานยนต์</p>
+        <!-- Header -->
+        <div id="headerSection" class="text-center mb-6">
+            <h1 class="text-4xl font-bold mb-2 tracking-tight">BU <span class="text-purple-500">Moto</span><span class="text-orange-500">Space</span></h1>
+            <p class="text-slate-400 text-sm font-light">ระบบลงทะเบียนรถจักรยานยนต์มหาวิทยาลัยกรุงเทพ</p>
         </div>
 
-        <form id="regForm" onsubmit="return false;" class="space-y-4">
-                <!-- Name Row -->
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">ชื่อ</label>
-                        <input type="text" id="firstName" placeholder="ชื่อจริง" 
-                            class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">นามสกุล</label>
-                        <input type="text" id="lastName" placeholder="นามสกุล" 
-                            class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-white">
-                    </div>
-                </div>
-
-                <!-- Student ID -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">รหัสนักศึกษา</label>
-                    <input type="text" id="studentId" placeholder="1-XX-XX-XXXX" 
-                        class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-white">
-                </div>
-
-                <!-- Phone -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">เบอร์โทรศัพท์</label>
-                    <input type="tel" id="phoneNumber" placeholder="0XXXXXXXXX" maxlength="12"
-                        class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all text-white">
-                </div>
-
-                <!-- License Plate -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">ทะเบียนรถ</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="platePrefix" placeholder="กขค" maxlength="3"
-                            class="w-1/3 bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 text-center uppercase">
-                        <input type="text" id="plateNumber" placeholder="1234" maxlength="4"
-                            class="w-2/3 bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">จังหวัด</label>
-                    <select id="plateProvince" class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 transition-all text-white appearance-none cursor-pointer">
-                        <option value="" disabled selected>เลือกจังหวัด</option>
-                        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-                        <option value="ปทุมธานี">ปทุมธานี</option>
-                        <option value="นนทบุรี">นนทบุรี</option>
-                        <option value="สมุทรปราการ">สมุทรปราการ</option>
-                        <option value="ชลบุรี">ชลบุรี</option>
-                        <option value="เชียงใหม่">เชียงใหม่</option>
-                        <option value="ขอนแก่น">ขอนแก่น</option>
-                        <option value="ภูเก็ต">ภูเก็ต</option>
-                        <option value="อื่นๆ">จังหวัดอื่นๆ</option>
-                    </select>
-                </div>
-
-                <!-- Photo Upload -->
-                <div id="dropZone" onclick="document.getElementById('fileInput').click()" 
-                     class="p-4 border-2 border-dashed border-slate-800 rounded-2xl text-center hover:border-orange-500/50 hover:bg-orange-500/5 cursor-pointer transition-all group relative overflow-hidden">
-                    <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="handleFile(this)">
-                    
-                    <div id="uploadPlaceholder">
-                        <div class="text-slate-600 group-hover:text-orange-400 transition-colors mb-1 text-2xl">🏍️</div>
-                        <p class="text-[10px] text-slate-400 font-medium">ถ่ายรูป/อัปโหลดภาพรถของคุณ</p>
-                        <p class="text-[8px] text-slate-500 mt-1 uppercase tracking-tighter">ต้องเห็นป้ายทะเบียนชัดเจน</p>
-                    </div>
-
-                    <div id="filePreviewContainer" class="hidden">
-                        <img id="imagePreview" src="#" class="mx-auto h-24 w-auto rounded-lg shadow-lg mb-2 border border-white/10">
-                        <p class="text-[10px] text-green-400 font-semibold">เปลี่ยนรูปภาพ</p>
-                    </div>
-                </div>
-
-                <button id="submitBtn" onclick="submitForm()" class="w-full bu-gradient py-4 rounded-xl font-bold text-lg hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-orange-500/20 flex justify-center items-center gap-3">
-                    <span>ยืนยันการลงทะเบียน</span>
-                </button>
-                
-                <p id="errorMsg" class="text-red-400 text-[11px] text-center hidden p-2 bg-red-400/10 rounded-lg"></p>
-            </form>
-        </div>
-
-        <!-- Success Message -->
-        <div id="successMessage" class="hidden text-center py-4 space-y-6 animate-success">
-            <div class="w-20 h-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 border border-green-500/20 shadow-[0_0_20px_rgba(34,197,94,0.2)]">✓</div>
-            
-            <div>
-                <h2 class="text-2xl font-bold">สำเร็จแล้ว!</h2>
-                <p id="welcomeUser" class="text-slate-300 font-medium text-sm mt-1"></p>
-            </div>
-            
-            <div class="p-6 bg-white rounded-[2rem] mx-auto w-56 shadow-2xl relative">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-900 text-[8px] text-white px-3 py-1 rounded-full uppercase tracking-widest font-bold">BU Parking Pass</div>
-                <img id="qrImage" src="" alt="QR Code" class="w-full h-auto">
-                <div class="mt-4 pt-4 border-t border-slate-100">
-                    <div id="plateLabel" class="text-slate-900 font-black text-xl leading-none">---</div>
-                    <div id="provinceLabel" class="text-slate-400 text-[10px] font-bold mt-1 uppercase">---</div>
-                </div>
-            </div>
-
-            <p class="text-slate-400 text-[10px] px-8">บันทึกหน้าจอนี้ไว้เพื่อแสดงต่อเจ้าหน้าที่หรือสแกนเข้าจุดจอด</p>
-
-            <button onclick="resetForm()" class="mt-4 px-6 py-2 rounded-full border border-slate-800 text-slate-500 text-xs hover:text-white hover:border-slate-600 transition-all">
-                ลงทะเบียนคันใหม่
+        <!-- Tab Selection -->
+        <div id="tabContainer" class="flex gap-2 mb-6 p-1 bg-slate-900 rounded-2xl border border-slate-800">
+            <button onclick="switchTab('student')" id="btnStudent" class="flex-1 py-2.5 px-4 rounded-xl border text-sm transition-all tab-active">
+                นักศึกษา
+            </button>
+            <button onclick="switchTab('staff')" id="btnStaff" class="flex-1 py-2.5 px-4 rounded-xl border text-sm transition-all tab-inactive">
+                บุคลากร
             </button>
         </div>
 
+        <!-- Registration Form -->
+        <form id="regForm" onsubmit="return false;" class="space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">ชื่อ</label>
+                    <input type="text" id="firstName" placeholder="ภาษาไทย" 
+                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-all text-white placeholder:text-slate-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">นามสกุล</label>
+                    <input type="text" id="lastName" placeholder="ภาษาไทย" 
+                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-all text-white placeholder:text-slate-600">
+                </div>
+            </div>
+
+            <div id="fieldStudentId">
+                <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">รหัสนักศึกษา</label>
+                <input type="text" id="studentId" placeholder="1-xxxx-xxxx-x" maxlength="13"
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-all text-white font-mono placeholder:text-slate-600 tracking-widest">
+            </div>
+
+            <div id="fieldStaffId" class="hidden">
+                <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">รหัสบุคลากร</label>
+                <input type="text" id="staffId" placeholder="xxxxx" maxlength="5"
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-all text-white font-mono placeholder:text-slate-600 tracking-[0.5em]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">เบอร์โทรศัพท์</label>
+                <input type="tel" id="phoneNumber" placeholder="0xx-xxx-xxxx" maxlength="12"
+                    class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-all text-white font-mono placeholder:text-slate-600 tracking-widest">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">ทะเบียนรถ</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="platePrefix" placeholder="1กข" maxlength="3"
+                            class="w-1/3 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 text-center uppercase font-bold">
+                        <input type="text" id="plateNumber" placeholder="1234" maxlength="4"
+                            class="w-2/3 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 font-bold tracking-widest">
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">จังหวัด</label>
+                    <div class="relative">
+                        <select id="plateProvince" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 transition-all text-white appearance-none cursor-pointer">
+                            <option value="" disabled selected>เลือกจังหวัด</option>
+                            <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+                            <option value="ปทุมธานี">ปทุมธานี</option>
+                            <option value="นนทบุรี">นนทบุรี</option>
+                            <option value="สมุทรปราการ">สมุทรปราการ</option>
+                            <option value="พระนครศรีอยุธยา">พระนครศรีอยุธยา</option>
+                            <option value="ชลบุรี">ชลบุรี</option>
+                            <option value="อื่นๆ">จังหวัดอื่นๆ</option>
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">▼</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Photo -->
+            <div onclick="document.getElementById('fileInput').click()" 
+                 class="p-4 border-2 border-dashed border-slate-700 rounded-2xl text-center hover:border-orange-500 cursor-pointer transition-all group relative">
+                <input type="file" id="fileInput" class="hidden" accept="image/*">
+                <div id="uploadPlaceholder">
+                    <div class="text-slate-500 group-hover:text-orange-400 mb-1 text-2xl transition-transform group-hover:scale-110">🏍️</div>
+                    <p class="text-[10px] text-slate-400 font-medium">อัปโหลดรูปภาพรถ</p>
+                </div>
+                <div id="filePreview" class="hidden text-xs text-green-400 font-semibold flex flex-col items-center gap-2">
+                    <div class="text-xl">✨</div>
+                    <span id="fileNameDisplay">รูปถ่ายพร้อมแล้ว</span>
+                </div>
+            </div>
+
+            <button id="submitBtn" class="w-full bu-gradient py-4 rounded-xl font-bold text-lg hover:brightness-110 active:scale-95 transition-all shadow-lg flex justify-center items-center gap-3">
+                <span>ยืนยันการลงทะเบียน</span>
+            </button>
+            
+            <p id="errorMsg" class="text-red-400 text-[10px] text-center hidden font-medium"></p>
+        </form>
+
+        <!-- Success Message (Hidden by default) -->
+        <div id="successMessage" class="hidden text-center py-2 space-y-6">
+            <div class="flex flex-col items-center">
+                <div class="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center text-3xl mb-4 border border-green-500/30 animate-pulse">✓</div>
+                <h2 class="text-2xl font-bold text-white leading-tight">ลงทะเบียนเรียบร้อยแล้ว!</h2>
+                <p class="text-orange-400 text-sm mt-1">ข้อมูลของคุณถูกบันทึกเข้าสู่ระบบ Bu MOTOSPACE แล้ว</p>
+            </div>
+
+            <div class="flex justify-center my-6">
+                <img id="displayBikeImg" src="" alt="Motorcycle" class="bike-preview-circle">
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-700 rounded-2xl p-5 text-left space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <span class="text-slate-500 text-xs">เจ้าของรถ</span>
+                    <span id="displayName" class="text-white font-semibold"></span>
+                </div>
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <span class="text-slate-500 text-xs">เบอร์โทรศัพท์</span>
+                    <span id="displayPhone" class="text-white font-mono"></span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500 text-xs">หมายเลขทะเบียน</span>
+                    <div class="text-right">
+                        <div id="displayPlate" class="text-orange-500 font-bold text-lg leading-none uppercase"></div>
+                        <div id="displayProvince" class="text-slate-400 text-[10px] mt-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button onclick="location.reload()" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl text-sm font-medium transition-colors border border-slate-700">ลงทะเบียนคันอื่นเพิ่มเติม</button>
+            </div>
+        </div>
+
         <div class="mt-8 text-center">
-            <p class="text-[9px] text-slate-700 uppercase tracking-[0.2em]">
+            <div class="text-[10px] text-slate-500 font-medium tracking-wide">
                 Copyright By Student Safety and Conduct Department
-            </p>
+            </div>
         </div>
     </div>
 
     <script>
-        // ⚠️ นำ URL จาก Google Apps Script (Web App) มาใส่ที่นี่
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYCRtiWdE6cUIYMdBh1kUAS8aXyIFGeUJe2MEsxbgpqnSILKYqy080o5QwgkDO0rbyMg/exec';
+        // เปลี่ยนมาใช้ Google Apps Script API แทน Firebase
+        // ** นำ URL ที่ได้จากการ Deploy Apps Script มาใส่ตรงนี้ **
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYCRtiWdE6cUIYMdBh1kUAS8aXyIFGeUJe2MEsxbgpqnSILKYqy080o5QwgkDO0rbyMg/exec"; 
 
-        // Auto-format Student ID
-        document.getElementById('studentId').addEventListener('input', function(e) {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,2})(\d{0,2})(\d{0,4})/);
-            e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '') + (x[4] ? '-' + x[4] : '');
+        let activeTab = 'student';
+        let bikeImageData = null;
+
+        window.switchTab = function(tab) {
+            activeTab = tab;
+            const btnS = document.getElementById('btnStudent');
+            const btnP = document.getElementById('btnStaff');
+            const fieldS = document.getElementById('fieldStudentId');
+            const fieldP = document.getElementById('fieldStaffId');
+
+            if (tab === 'student') {
+                btnS.classList.replace('tab-inactive', 'tab-active');
+                btnP.classList.replace('tab-active', 'tab-inactive');
+                fieldS.classList.remove('hidden');
+                fieldP.classList.add('hidden');
+            } else {
+                btnP.classList.replace('tab-inactive', 'tab-active');
+                btnS.classList.replace('tab-active', 'tab-inactive');
+                fieldP.classList.remove('hidden');
+                fieldS.classList.add('hidden');
+            }
+        };
+
+        document.getElementById('studentId').addEventListener('input', e => {
+            let v = e.target.value.replace(/\D/g, '');
+            let f = '';
+            if (v.length > 0) f += v[0];
+            if (v.length > 1) f += '-' + v.substring(1, 5);
+            if (v.length > 5) f += '-' + v.substring(5, 9);
+            if (v.length > 9) f += '-' + v[9];
+            e.target.value = f;
         });
 
-        // Auto-format Phone
-        document.getElementById('phoneNumber').addEventListener('input', function(e) {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-            if (!x) return;
-            e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+        document.getElementById('phoneNumber').addEventListener('input', e => {
+            let v = e.target.value.replace(/\D/g, '');
+            let f = '';
+            if (v.length > 0) f += v.substring(0, 3);
+            if (v.length > 3) f += '-' + v.substring(3, 6);
+            if (v.length > 6) f += '-' + v.substring(6, 10);
+            e.target.value = f;
         });
 
-        // Handle Image Preview
-        window.handleFile = function(input) {
-            if (input.files && input.files[0]) {
+        document.getElementById('fileInput').addEventListener('change', function() {
+            if (this.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('imagePreview').src = e.target.result;
+                    bikeImageData = e.target.result;
+                    document.getElementById('displayBikeImg').src = bikeImageData;
                     document.getElementById('uploadPlaceholder').classList.add('hidden');
-                    document.getElementById('filePreviewContainer').classList.remove('hidden');
-                    document.getElementById('dropZone').classList.add('border-green-500/30', 'bg-green-500/5');
-                }
-                reader.readAsDataURL(input.files[0]);
+                    document.getElementById('filePreview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(this.files[0]);
             }
-        };
+        });
 
-        function getBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = error => reject(error);
-            });
+        function showError(m) {
+            const e = document.getElementById('errorMsg');
+            e.innerText = m; e.classList.remove('hidden');
+            setTimeout(() => e.classList.add('hidden'), 3000);
         }
 
-        window.submitForm = async function() {
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            const studentId = document.getElementById('studentId').value.trim();
-            const phoneNumber = document.getElementById('phoneNumber').value.trim();
-            const prefix = document.getElementById('platePrefix').value.trim();
-            const number = document.getElementById('plateNumber').value.trim();
-            const province = document.getElementById('plateProvince').value;
-            const fileInput = document.getElementById('fileInput');
-            const submitBtn = document.getElementById('submitBtn');
-            const errorMsg = document.getElementById('errorMsg');
+        document.getElementById('submitBtn').addEventListener('click', async () => {
+            const formData = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                phone: document.getElementById('phoneNumber').value.trim(),
+                prefix: document.getElementById('platePrefix').value.trim(),
+                number: document.getElementById('plateNumber').value.trim(),
+                province: document.getElementById('plateProvince').value
+            };
 
-            // Basic Validation
-            if (!firstName || !lastName || !studentId || !phoneNumber || !prefix || !number || !province) {
-                return showError("โปรดกรอกข้อมูลให้ครบทุกช่อง");
-            }
-            if (fileInput.files.length === 0) {
-                return showError("โปรดแนบรูปภาพรถของคุณ");
+            const idValue = activeTab === 'student' ? 
+                document.getElementById('studentId').value.trim() : 
+                document.getElementById('staffId').value.trim();
+
+            if (Object.values(formData).some(v => !v) || !idValue || !bikeImageData) {
+                return showError("กรุณากรอกข้อมูลและอัปโหลดรูปภาพให้ครบถ้วน");
             }
 
-            if (GOOGLE_SCRIPT_URL === 'YOUR_WEB_APP_URL_HERE') {
-                return showError("กรุณาตั้งค่า GOOGLE_SCRIPT_URL ในโค้ดก่อนใช้งานจริง");
-            }
-
-            // Loading UI
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<span class="loader"></span> <span>กำลังบันทึกข้อมูล...</span>`;
-            errorMsg.classList.add('hidden');
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="loader"></span> <span>กำลังส่งข้อมูล...</span>`;
 
             try {
-                const file = fileInput.files[0];
-                const base64Data = await getBase64(file);
-
-                // Prepare payload
-                const payload = {
-                    firstName,
-                    lastName,
-                    studentId,
-                    phoneNumber,
-                    plate: `${prefix.toUpperCase()}-${number}`,
-                    province: province,
-                    imageName: `BU_MOTO_${studentId.replace(/-/g, '')}`,
-                    mimeType: file.type,
-                    imageData: base64Data
+                const finalData = {
+                    ...formData,
+                    personalId: idValue,
+                    type: activeTab,
+                    licensePlate: `${formData.prefix} ${formData.number}`,
+                    imageBase64: bikeImageData
                 };
 
-                // Send to Google Apps Script
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                // ส่งข้อมูลไปยัง Google Apps Script
+                const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(finalData)
                 });
-
+                
                 const result = await response.json();
 
-                if (result.status === 'success') {
-                    // Show Success Message
-                    document.getElementById('welcomeUser').innerText = `คุณ ${firstName} ${lastName}`;
-                    document.getElementById('plateLabel').innerText = `${prefix.toUpperCase()} ${number}`;
-                    document.getElementById('provinceLabel').innerText = province;
-                    
-                    // Generate QR based on student ID
-                    const rawSid = studentId.replace(/-/g, '');
-                    document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=BU-MOTO-${rawSid}&bgcolor=ffffff&color=0f172a&margin=2`;
-                    
-                    document.getElementById('formSection').classList.add('hidden');
+                if (result.status === "success") {
+                    document.getElementById('displayName').innerText = `${finalData.firstName} ${finalData.lastName}`;
+                    document.getElementById('displayPhone').innerText = finalData.phone;
+                    document.getElementById('displayPlate').innerText = finalData.licensePlate;
+                    document.getElementById('displayProvince').innerText = finalData.province;
+
+                    document.getElementById('regForm').classList.add('hidden');
+                    document.getElementById('tabContainer').classList.add('hidden');
                     document.getElementById('successMessage').classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
-                    throw new Error(result.message || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์");
+                    throw new Error(result.message || "บันทึกไม่สำเร็จ");
                 }
-                
-            } catch (error) {
-                console.error("Submission error:", error);
-                showError("ขออภัย เกิดข้อผิดพลาดในการส่งข้อมูล");
+
+            } catch (e) {
+                console.error(e);
+                showError("เกิดข้อผิดพลาดในการส่งข้อมูลไปยัง Google Sheet");
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `<span>ยืนยันการลงทะเบียน</span>`;
+                btn.disabled = false;
+                btn.innerHTML = `ยืนยันการลงทะเบียน`;
             }
-        };
-
-        window.resetForm = function() {
-            document.getElementById('regForm').reset();
-            document.getElementById('uploadPlaceholder').classList.remove('hidden');
-            document.getElementById('filePreviewContainer').classList.add('hidden');
-            document.getElementById('dropZone').classList.remove('border-green-500/30', 'bg-green-500/5');
-            document.getElementById('formSection').classList.remove('hidden');
-            document.getElementById('successMessage').classList.add('hidden');
-            document.getElementById('errorMsg').classList.add('hidden');
-        };
-
-        function showError(msg) {
-            const errorMsg = document.getElementById('errorMsg');
-            errorMsg.innerText = msg;
-            errorMsg.classList.remove('hidden');
-            errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        });
     </script>
 </body>
 </html>
