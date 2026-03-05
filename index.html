@@ -47,6 +47,16 @@
             background-color: #1e293b;
         }
 
+        .bike-preview-circle-sm {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #f97316;
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+            object-fit: cover;
+            background-color: #1e293b;
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
@@ -135,21 +145,46 @@
                 </div>
             </div>
 
-            <!-- Upload Photo -->
-            <div onclick="document.getElementById('fileInput').click()" 
-                 class="p-4 border-2 border-dashed border-slate-700 rounded-2xl text-center hover:border-orange-500 cursor-pointer transition-all group relative">
-                <input type="file" id="fileInput" class="hidden" accept="image/*">
-                <div id="uploadPlaceholder">
-                    <div class="text-slate-500 group-hover:text-orange-400 mb-1 text-2xl transition-transform group-hover:scale-110">🏍️</div>
-                    <p class="text-[10px] text-slate-400 font-medium">อัปโหลดรูปภาพรถ</p>
-                </div>
-                <div id="filePreview" class="hidden text-xs text-green-400 font-semibold flex flex-col items-center gap-2">
-                    <div class="text-xl">✨</div>
-                    <span id="fileNameDisplay">รูปถ่ายพร้อมแล้ว</span>
+            <!-- Upload Photos -->
+            <div class="col-span-2 mt-2">
+                <label class="block text-xs font-semibold text-slate-400 uppercase mb-1.5 ml-1">รูปถ่ายรถจักรยานยนต์ (2 รูป)</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- Side Photo -->
+                    <div onclick="document.getElementById('fileInputSide').click()" 
+                         class="p-3 border-2 border-dashed border-slate-700 rounded-2xl text-center hover:border-orange-500 cursor-pointer transition-all group relative overflow-hidden flex flex-col items-center justify-center h-32 bg-slate-800/50">
+                        <input type="file" id="fileInputSide" class="hidden" accept="image/*">
+                        <div id="uploadPlaceholderSide" class="flex flex-col items-center z-10 transition-opacity">
+                            <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=150&q=80" alt="ตัวอย่าง" class="w-16 h-10 object-cover rounded-md mb-2 opacity-60 group-hover:opacity-100 transition-opacity shadow-md">
+                            <p class="text-[10px] text-slate-300 font-medium">1. ถ่ายด้านข้างรถ</p>
+                        </div>
+                        <img id="displayBikeSideImgForm" src="" class="hidden w-full h-full object-cover absolute inset-0 z-0 opacity-40">
+                        <div id="filePreviewSide" class="hidden absolute inset-0 bg-slate-900/80 z-20 flex flex-col items-center justify-center backdrop-blur-sm border-2 border-green-500 rounded-2xl">
+                            <div class="text-2xl mb-1">✅</div>
+                            <span class="text-xs text-green-400 font-bold">อัปโหลดแล้ว</span>
+                        </div>
+                    </div>
+
+                    <!-- Plate Photo -->
+                    <div onclick="document.getElementById('fileInputPlate').click()" 
+                         class="p-3 border-2 border-dashed border-slate-700 rounded-2xl text-center hover:border-orange-500 cursor-pointer transition-all group relative overflow-hidden flex flex-col items-center justify-center h-32 bg-slate-800/50">
+                        <input type="file" id="fileInputPlate" class="hidden" accept="image/*">
+                        <div id="uploadPlaceholderPlate" class="flex flex-col items-center z-10 transition-opacity">
+                            <div class="w-16 h-10 bg-white rounded-md mb-2 opacity-60 group-hover:opacity-100 transition-opacity shadow-md border-2 border-slate-400 flex flex-col items-center justify-center text-black font-bold leading-tight">
+                                <span class="text-[9px]">1กข</span>
+                                <span class="text-[11px]">1234</span>
+                            </div>
+                            <p class="text-[10px] text-slate-300 font-medium">2. ถ่ายแผ่นป้ายทะเบียน</p>
+                        </div>
+                        <img id="displayBikePlateImgForm" src="" class="hidden w-full h-full object-cover absolute inset-0 z-0 opacity-40">
+                        <div id="filePreviewPlate" class="hidden absolute inset-0 bg-slate-900/80 z-20 flex flex-col items-center justify-center backdrop-blur-sm border-2 border-green-500 rounded-2xl">
+                            <div class="text-2xl mb-1">✅</div>
+                            <span class="text-xs text-green-400 font-bold">อัปโหลดแล้ว</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <button id="submitBtn" class="w-full bu-gradient py-4 rounded-xl font-bold text-lg hover:brightness-110 active:scale-95 transition-all shadow-lg flex justify-center items-center gap-3">
+            <button id="submitBtn" class="w-full bu-gradient py-4 rounded-xl font-bold text-lg hover:brightness-110 active:scale-95 transition-all shadow-lg flex justify-center items-center gap-3 mt-2">
                 <span>ยืนยันการลงทะเบียน</span>
             </button>
             
@@ -164,8 +199,15 @@
                 <p class="text-orange-400 text-sm mt-1">ข้อมูลของคุณถูกบันทึกเข้าสู่ระบบ Bu MOTOSPACE แล้ว</p>
             </div>
 
-            <div class="flex justify-center my-6">
-                <img id="displayBikeImg" src="" alt="Motorcycle" class="bike-preview-circle">
+            <div class="flex justify-center gap-6 my-6">
+                <div class="relative flex flex-col items-center">
+                    <img id="successBikeSideImg" src="" alt="Side" class="bike-preview-circle-sm">
+                    <span class="mt-2 bg-slate-800 text-[10px] px-3 py-1 rounded-full border border-slate-700 text-slate-300">ด้านข้างรถ</span>
+                </div>
+                <div class="relative flex flex-col items-center">
+                    <img id="successBikePlateImg" src="" alt="Plate" class="bike-preview-circle-sm">
+                    <span class="mt-2 bg-slate-800 text-[10px] px-3 py-1 rounded-full border border-slate-700 text-slate-300">ป้ายทะเบียน</span>
+                </div>
             </div>
 
             <div class="bg-slate-900/80 border border-slate-700 rounded-2xl p-5 text-left space-y-3">
@@ -186,6 +228,23 @@
                 </div>
             </div>
 
+            <!-- Satisfaction Rating -->
+            <div id="ratingSection" class="bg-slate-900/50 border border-slate-700 rounded-2xl p-5 text-center mt-4 transition-all">
+                <p class="text-slate-300 text-sm font-semibold mb-2">ประเมินความพึงพอใจในการใช้งาน</p>
+                <div class="flex justify-center gap-2 flex-row-reverse" id="starContainer">
+                    <button class="star-btn peer text-4xl text-slate-600 hover:text-yellow-400 peer-hover:text-yellow-400 transition-colors focus:outline-none" data-rating="5">★</button>
+                    <button class="star-btn peer text-4xl text-slate-600 hover:text-yellow-400 peer-hover:text-yellow-400 transition-colors focus:outline-none" data-rating="4">★</button>
+                    <button class="star-btn peer text-4xl text-slate-600 hover:text-yellow-400 peer-hover:text-yellow-400 transition-colors focus:outline-none" data-rating="3">★</button>
+                    <button class="star-btn peer text-4xl text-slate-600 hover:text-yellow-400 peer-hover:text-yellow-400 transition-colors focus:outline-none" data-rating="2">★</button>
+                    <button class="star-btn peer text-4xl text-slate-600 hover:text-yellow-400 peer-hover:text-yellow-400 transition-colors focus:outline-none" data-rating="1">★</button>
+                </div>
+                <p id="ratingMessage" class="text-[11px] text-orange-400 mt-2 h-4 font-medium"></p>
+            </div>
+            
+            <div id="ratingThankYou" class="hidden bg-green-500/10 border border-green-500/30 rounded-2xl p-4 text-center mt-4 animate-[pulse_1s_ease-in-out]">
+                <p class="text-green-400 text-sm font-semibold">💖 ขอบคุณสำหรับการประเมิน!</p>
+            </div>
+
             <div class="pt-4">
                 <button onclick="location.reload()" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl text-sm font-medium transition-colors border border-slate-700">ลงทะเบียนคันอื่นเพิ่มเติม</button>
             </div>
@@ -198,13 +257,31 @@
         </div>
     </div>
 
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+        <div class="glass max-w-sm w-full p-6 rounded-2xl shadow-2xl border border-slate-700 transform scale-100 transition-transform">
+            <div class="text-center mb-5">
+                <div class="w-16 h-16 bg-orange-500/20 text-orange-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-orange-500/30">⚠️</div>
+                <h3 class="text-xl font-bold text-white mb-2">ยืนยันข้อมูล</h3>
+                <p class="text-sm text-slate-300">ข้าพเจ้าขอรับรองว่าข้อมูลข้างต้นเป็นความจริงทุกประการ</p>
+                <p class="text-[11px] text-red-400 mt-3 font-semibold">***หมายเหตุ การให้ข้อมูลอันเป็นเท็จมีโทษตามกฎหมาย***</p>
+            </div>
+            <div class="flex gap-3">
+                <button id="cancelConfirmBtn" class="flex-1 py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-medium transition-colors border border-slate-700">ยกเลิก</button>
+                <button id="acceptConfirmBtn" class="flex-1 py-3 px-4 bu-gradient text-white rounded-xl font-bold shadow-lg hover:brightness-110 transition-all">ยืนยัน</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // เปลี่ยนมาใช้ Google Apps Script API แทน Firebase
         // ** นำ URL ที่ได้จากการ Deploy Apps Script มาใส่ตรงนี้ **
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYCRtiWdE6cUIYMdBh1kUAS8aXyIFGeUJe2MEsxbgpqnSILKYqy080o5QwgkDO0rbyMg/exec"; 
 
         let activeTab = 'student';
-        let bikeImageData = null;
+        let bikeSideImageData = null;
+        let bikePlateImageData = null;
+        let submittedPersonalId = ""; // เพิ่มตัวแปรเก็บรหัสหลังลงทะเบียนสำเร็จ
 
         window.switchTab = function(tab) {
             activeTab = tab;
@@ -236,23 +313,31 @@
             e.target.value = f;
         });
 
-        document.getElementById('phoneNumber').addEventListener('input', e => {
-            let v = e.target.value.replace(/\D/g, '');
-            let f = '';
-            if (v.length > 0) f += v.substring(0, 3);
-            if (v.length > 3) f += '-' + v.substring(3, 6);
-            if (v.length > 6) f += '-' + v.substring(6, 10);
-            e.target.value = f;
-        });
-
-        document.getElementById('fileInput').addEventListener('change', function() {
+        document.getElementById('fileInputSide').addEventListener('change', function() {
             if (this.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    bikeImageData = e.target.result;
-                    document.getElementById('displayBikeImg').src = bikeImageData;
-                    document.getElementById('uploadPlaceholder').classList.add('hidden');
-                    document.getElementById('filePreview').classList.remove('hidden');
+                    bikeSideImageData = e.target.result;
+                    document.getElementById('displayBikeSideImgForm').src = bikeSideImageData;
+                    document.getElementById('displayBikeSideImgForm').classList.remove('hidden');
+                    document.getElementById('uploadPlaceholderSide').classList.add('opacity-0');
+                    document.getElementById('filePreviewSide').classList.remove('hidden');
+                    document.getElementById('successBikeSideImg').src = bikeSideImageData;
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        document.getElementById('fileInputPlate').addEventListener('change', function() {
+            if (this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    bikePlateImageData = e.target.result;
+                    document.getElementById('displayBikePlateImgForm').src = bikePlateImageData;
+                    document.getElementById('displayBikePlateImgForm').classList.remove('hidden');
+                    document.getElementById('uploadPlaceholderPlate').classList.add('opacity-0');
+                    document.getElementById('filePreviewPlate').classList.remove('hidden');
+                    document.getElementById('successBikePlateImg').src = bikePlateImageData;
                 };
                 reader.readAsDataURL(this.files[0]);
             }
@@ -264,7 +349,9 @@
             setTimeout(() => e.classList.add('hidden'), 3000);
         }
 
-        document.getElementById('submitBtn').addEventListener('click', async () => {
+        let pendingSubmissionData = null;
+
+        document.getElementById('submitBtn').addEventListener('click', () => {
             const formData = {
                 firstName: document.getElementById('firstName').value.trim(),
                 lastName: document.getElementById('lastName').value.trim(),
@@ -278,36 +365,54 @@
                 document.getElementById('studentId').value.trim() : 
                 document.getElementById('staffId').value.trim();
 
-            if (Object.values(formData).some(v => !v) || !idValue || !bikeImageData) {
-                return showError("กรุณากรอกข้อมูลและอัปโหลดรูปภาพให้ครบถ้วน");
+            if (Object.values(formData).some(v => !v) || !idValue || !bikeSideImageData || !bikePlateImageData) {
+                return showError("กรุณากรอกข้อมูลและอัปโหลดรูปภาพให้ครบถ้วนทั้ง 2 รูป");
             }
+
+            // เก็บข้อมูลไว้ก่อนยืนยัน
+            pendingSubmissionData = {
+                ...formData,
+                personalId: idValue,
+                type: activeTab,
+                licensePlate: `${formData.prefix} ${formData.number}`,
+                imageSideBase64: bikeSideImageData,
+                imagePlateBase64: bikePlateImageData
+            };
+
+            // แสดง Pop up ยืนยัน
+            document.getElementById('confirmModal').classList.remove('hidden');
+        });
+
+        document.getElementById('cancelConfirmBtn').addEventListener('click', () => {
+            document.getElementById('confirmModal').classList.add('hidden');
+            pendingSubmissionData = null;
+        });
+
+        document.getElementById('acceptConfirmBtn').addEventListener('click', async () => {
+            document.getElementById('confirmModal').classList.add('hidden');
+            
+            if (!pendingSubmissionData) return;
 
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerHTML = `<span class="loader"></span> <span>กำลังส่งข้อมูล...</span>`;
 
             try {
-                const finalData = {
-                    ...formData,
-                    personalId: idValue,
-                    type: activeTab,
-                    licensePlate: `${formData.prefix} ${formData.number}`,
-                    imageBase64: bikeImageData
-                };
-
                 // ส่งข้อมูลไปยัง Google Apps Script
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify(finalData)
+                    body: JSON.stringify(pendingSubmissionData)
                 });
                 
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    document.getElementById('displayName').innerText = `${finalData.firstName} ${finalData.lastName}`;
-                    document.getElementById('displayPhone').innerText = finalData.phone;
-                    document.getElementById('displayPlate').innerText = finalData.licensePlate;
-                    document.getElementById('displayProvince').innerText = finalData.province;
+                    submittedPersonalId = pendingSubmissionData.personalId; // จำรหัสผู้ใช้เพื่อส่งไปพร้อมคะแนน
+
+                    document.getElementById('displayName').innerText = `${pendingSubmissionData.firstName} ${pendingSubmissionData.lastName}`;
+                    document.getElementById('displayPhone').innerText = pendingSubmissionData.phone;
+                    document.getElementById('displayPlate').innerText = pendingSubmissionData.licensePlate;
+                    document.getElementById('displayProvince').innerText = pendingSubmissionData.province;
 
                     document.getElementById('regForm').classList.add('hidden');
                     document.getElementById('tabContainer').classList.add('hidden');
@@ -322,8 +427,47 @@
                 showError("เกิดข้อผิดพลาดในการส่งข้อมูลไปยัง Google Sheet");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `ยืนยันการลงทะเบียน`;
+                btn.innerHTML = `<span>ยืนยันการลงทะเบียน</span>`;
+                pendingSubmissionData = null;
             }
+        });
+
+        // Satisfaction Rating Logic
+        const stars = document.querySelectorAll('.star-btn');
+        const msgs = ["ควรปรับปรุง", "พอใช้", "ปานกลาง", "ดี", "ดีมาก"];
+        
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                document.getElementById('ratingMessage').innerText = msgs[rating - 1];
+            });
+            
+            star.addEventListener('mouseout', function() {
+                document.getElementById('ratingMessage').innerText = "";
+            });
+
+            star.addEventListener('click', async function() {
+                const rating = this.getAttribute('data-rating');
+                
+                // ซ่อนกรอบให้คะแนนและแสดงคำขอบคุณ
+                document.getElementById('ratingSection').classList.add('hidden');
+                document.getElementById('ratingThankYou').classList.remove('hidden');
+                
+                // ส่งคะแนนเข้า Google Sheet
+                try {
+                    await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            action: 'rating',
+                            personalId: submittedPersonalId,
+                            rating: rating
+                        })
+                    });
+                    console.log("บันทึกคะแนนความพึงพอใจสำเร็จ: " + rating + " ดาว");
+                } catch (e) {
+                    console.error("เกิดข้อผิดพลาดในการส่งคะแนน", e);
+                }
+            });
         });
     </script>
 </body>
